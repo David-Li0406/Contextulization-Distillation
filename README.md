@@ -7,7 +7,7 @@ Contextualization Distillation from Large Language Models for Knowlege Graph Com
 ## Overview
 
 <p align="center">
-  <img src="./overview.png" width="750" title="Overview of our framework" alt="">
+  <img src="overview.png" width="750" title="Overview of our framework" alt="">
 </p>
 
 ## Dependency
