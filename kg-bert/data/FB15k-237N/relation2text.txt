@@ -1,0 +1,93 @@
+/music/artist/origin	music , artist , origin
+/people/deceased_person/place_of_death	people , deceased person , place of death
+/people/person/profession	people , person , profession
+/location/administrative_division/first_level_division_of	location , administrative division , first level division of
+/location/us_county/county_seat	location , us county , county seat
+/location/location/partially_contains	location , location , partially contains
+/tv/tv_program/program_creator	tv , tv program , program creator
+/film/film/music	film , film , music
+/tv/tv_program/languages	tv , tv program , languages
+/film/film_set_designer/film_sets_designed	film , film set designer , film sets designed
+/dataworld/gardening_hint/split_to	dataworld , gardening hint , split to
+/people/person/languages	people , person , languages
+/location/country/form_of_government	location , country , form of government
+/people/person/place_of_birth	people , person , place of birth
+/sports/sports_team/colors	sports , sports team , colors
+/education/educational_institution/school_type	education , educational institution , school type
+/location/hud_county_place/county	location , hud county place , county
+/location/administrative_division/country	location , administrative division , country
+/film/film/film_production_design_by	film , film , film production design by
+/tv/tv_program/country_of_origin	tv , tv program , country of origin
+/location/country/second_level_divisions	location , country , second level divisions
+/education/educational_institution/campuses	education , educational institution , campuses
+/people/person/religion	people , person , religion
+/music/instrument/instrumentalists	music , instrument , instrumentalists
+/people/cause_of_death/people	people , cause of death , people
+/film/film/film_art_direction_by	film , film , film art direction by
+/film/film/cinematography	film , film , cinematography
+/base/biblioness/bibs_location/state	base , biblioness , bibs location , state
+/people/person/gender	people , person , gender
+/film/director/film	film , director , film
+/olympics/olympic_games/sports	olympics , olympic games , sports
+/music/record_label/artist	music , record label , artist
+/film/film/story_by	film , film , story by
+/people/profession/specialization_of	people , profession , specialization of
+/base/americancomedy/celebrity_impressionist/celebrities_impersonated	base , americancomedy , celebrity impressionist , celebrities impersonated
+/tv/tv_program/genre	tv , tv program , genre
+/language/human_language/countries_spoken_in	language , human language , countries spoken in
+/education/university/fraternities_and_sororities	education , university , fraternities and sororities
+/location/location/time_zones	location , location , time zones
+/film/film_subject/films	film , film subject , films
+/education/educational_institution/colors	education , educational institution , colors
+/award/award_category/category_of	award , award category , category of
+/film/film/language	film , film , language
+/film/film/film_festivals	film , film , film festivals
+/base/aareas/schema/administrative_area/administrative_parent	base , aareas , schema , administrative area , administrative parent
+/organization/organization/place_founded	organization , organization , place founded
+/medicine/disease/risk_factors	medicine , disease , risk factors
+/broadcast/content/artist	broadcast , content , artist
+/people/deceased_person/place_of_burial	people , deceased person , place of burial
+/film/film/prequel	film , film , prequel
+/film/film/produced_by	film , film , produced by
+/olympics/olympic_games/participating_countries	olympics , olympic games , participating countries
+/music/genre/parent_genre	music , genre , parent genre
+/music/genre/artists	music , genre , artists
+/film/film/genre	film , film , genre
+/people/person/nationality	people , person , nationality
+/location/country/capital	location , country , capital
+/base/aareas/schema/administrative_area/capital	base , aareas , schema , administrative area , capital
+/business/business_operation/industry	business , business operation , industry
+/film/film/film_format	film , film , film format
+/medicine/disease/notable_people_with_this_condition	medicine , disease , notable people with this condition
+/film/film/costume_design_by	film , film , costume design by
+/organization/organization_founder/organizations_founded	organization , organization founder , organizations founded
+/sports/sports_team/sport	sports , sports team , sport
+/people/ethnicity/geographic_distribution	people , ethnicity , geographic distribution
+/location/country/official_language	location , country , official language
+/film/film/production_companies	film , film , production companies
+/user/jg/default_domain/olympic_games/sports	user , jg , default domain , olympic games , sports
+/time/event/locations	time , event , locations
+/media_common/netflix_genre/titles	media common , netflix genre , titles
+/user/alexander/philosophy/philosopher/interests	user , alexander , philosophy , philosopher , interests
+/base/eating/practicer_of_diet/diet	base , eating , practicer of diet , diet
+/medicine/symptom/symptom_of	medicine , symptom , symptom of
+/sports/sports_team_location/teams	sports , sports team location , teams
+/music/instrument/family	music , instrument , family
+/award/award_category/disciplines_or_subjects	award , award category , disciplines or subjects
+/film/film/edited_by	film , film , edited by
+/film/film/country	film , film , country
+/time/event/instance_of_recurring_event	time , event , instance of recurring event
+/influence/influence_node/influenced_by	influence , influence node , influenced by
+/base/culturalevent/event/entity_involved	base , culturalevent , event , entity involved
+/people/ethnicity/people	people , ethnicity , people
+/location/hud_county_place/place	location , hud county place , place
+/base/aareas/schema/administrative_area/administrative_area_type	base , aareas , schema , administrative area , administrative area type
+/base/locations/continents/countries_within	base , locations , continents , countries within
+/film/film/written_by	film , film , written by
+/film/film/featured_film_locations	film , film , featured film locations
+/education/educational_institution_campus/educational_institution	education , educational institution campus , educational institution
+/people/ethnicity/languages_spoken	people , ethnicity , languages spoken
+/film/film/executive_produced_by	film , film , executive produced by
+/location/location/contains	location , location , contains
+/base/biblioness/bibs_location/country	base , biblioness , bibs location , country
+/user/ktrueman/default_domain/international_organization/member_states	user , ktrueman , default domain , international organization , member states

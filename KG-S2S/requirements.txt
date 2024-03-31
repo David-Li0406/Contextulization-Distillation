@@ -1,0 +1,6 @@
+transformers==4.16.2
+pandas==1.2.4
+dataclasses==0.6
+tqdm==4.61.2
+pygtrie==2.4.2
+pytorch_lightning==1.5.3
