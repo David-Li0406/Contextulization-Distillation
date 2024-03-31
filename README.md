@@ -109,6 +109,7 @@ bash train_fb15k237N.sh
 
 Credits: This work began as a fork of several KGC models' repository: [KG-BERT](https://github.com/yao8839836/kg-bert), [CSProm-KG](https://github.com/chenchens190009/CSProm-KG), [PromptKG](https://github.com/zjunlp/PromptKG) and [KG-S2S](https://github.com/chenchens190009/KG-S2S). If you found our code useful, please consider citing:
 
+```
 @inproceedings{li-etal-2024-contextualization,
     title = "Contextualization Distillation from Large Language Model for Knowledge Graph Completion",
     author = "Li, Dawei  and
@@ -126,3 +127,4 @@ Credits: This work began as a fork of several KGC models' repository: [KG-BERT](
     pages = "458--477",
     abstract = "While textual information significantly enhances the performance of pre-trained language models (PLMs) in knowledge graph completion (KGC), the static and noisy nature of existing corpora collected from Wikipedia articles or synsets definitions often limits the potential of PLM-based KGC models. To surmount these challenges, we introduce the \textit{Contextualization Distillation} strategy, a versatile plug-in-and-play approach compatible with both discriminative and generative KGC frameworks. Our method begins by instructing large language models (LLMs) to transform compact, structural triplets into context-rich segments. Subsequently, we introduce two tailored auxiliary tasks{---}reconstruction and contextualization{---}allowing smaller KGC models to assimilate insights from these enriched triplets. Comprehensive evaluations across diverse datasets and KGC techniques highlight the efficacy and adaptability of our approach, revealing consistent performance enhancements irrespective of underlying pipelines or architectures. Moreover, our analysis makes our method more explainable and provides insight into how to generate high-quality corpora for KGC, as well as the selection of suitable distillation tasks.",
 }
+```
