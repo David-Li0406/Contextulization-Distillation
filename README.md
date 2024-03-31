@@ -96,6 +96,7 @@ bash genkgc_FB15k-237N.sh
 
 For KG-S2S on WN18RR, run
 
+```
 cd KG-S2S
 bash train_wn18rr.sh
 ```
