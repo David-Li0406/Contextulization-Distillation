@@ -42,9 +42,6 @@ def main():
         time.sleep(2)
         head, relation, tail = sample
         head_name, relation_name, tail_name = id2entity[int(head)], id2relation[int(relation)], id2entity[int(tail)]
-        head_name='J.G. Ballard'
-        tail_name='Shanghai'
-        relation_name='/people/person/place_of_birth'
         prompt = template.format(head_name, relation_name, tail_name, head_name, tail_name, relation_name, head_name, tail_name)
         try:
             ret = request_api_palm(prompt, count=1)
