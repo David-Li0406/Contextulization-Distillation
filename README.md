@@ -4,6 +4,10 @@ Contextualization Distillation from Large Language Models for Knowlege Graph Com
 
 </div>
 
+## Update
+
+4.24: add KG-S2S implementation and descriptive context files.
+
 ## Overview
 
 <p align="center">
@@ -35,9 +39,9 @@ cd KGE-LLM
 python run.sh
 ```
 
-After runing the script, you should get two data files ``knowledge_context.txt`` and ``train2id_choosen.txt`` in the corresponding dataset folder.
+After runing the script, you should get two data files ``knowledge_context.txt`` in the corresponding dataset folder.
 
-We will later provide the generated corpus [here](coming soon) and the post-processing script.
+We will later provide the generated corpus [here](https://drive.google.com/drive/folders/1QQAKEAIELteDhlR_ScZczf41L2iE_PLy?usp=sharing) and the post-processing script.
 
 
 ## Contextualization Distillation with Different KGC Baselines
