@@ -10,8 +10,9 @@ from transformers import T5Tokenizer
 from transformers import T5Config
 from models.model import T5Finetuner
 from data import DataModule
-from helper import get_num, read, read_name, read_file, get_ground_truth, get_next_token_dict, construct_prefix_trie
+from helper import get_num, read, read_name, read_file, read_context, get_ground_truth, get_next_token_dict, construct_prefix_trie
 from callbacks import PrintingCallback
+os.environ["PL_TORCH_DISTRIBUTED_BACKEND"] = "gloo"
 
 
 def main():
@@ -20,6 +21,9 @@ def main():
         train_triples = read(configs, configs.dataset_path, configs.dataset, 'train2id_choosen.txt')
     else:
         train_triples = read(configs, configs.dataset_path, configs.dataset, 'train2id.txt')
+    context_triples = None
+    if configs.contextualization:
+        context_triples = read_context(configs, configs.dataset_path, configs.dataset, 'knowledge_context{}.txt'.format(configs.suffix))
     valid_triples = read(configs, configs.dataset_path, configs.dataset, 'valid2id.txt')
     test_triples = read(configs, configs.dataset_path, configs.dataset, 'test2id.txt')
     all_triples = train_triples + valid_triples + test_triples
@@ -73,7 +77,7 @@ def main():
         'all_head_ground_truth': all_head_ground_truth,
     }
 
-    datamodule = DataModule(configs, train_triples, valid_triples, test_triples, name_list_dict, prefix_trie_dict, ground_truth_dict)
+    datamodule = DataModule(configs, train_triples, valid_triples, test_triples, name_list_dict, prefix_trie_dict, ground_truth_dict, context_triples=context_triples)
     print('datamodule construction done.', flush=True)
 
     checkpoint_callback = ModelCheckpoint(
@@ -90,7 +94,7 @@ def main():
         'max_epochs': configs.epochs,  # 1000
         'checkpoint_callback': True,  # True
         'logger': False,  # TensorBoardLogger
-        'num_sanity_val_steps': 0,  # 2
+        'num_sanity_val_steps': 2,  # 2
         'check_val_every_n_epoch': 3,
         'enable_progress_bar': True,
         'callbacks': [
@@ -108,6 +112,7 @@ def main():
     if configs.model_path == '':
         model = T5Finetuner(configs, **kw_args)
         print('model construction done.', flush=True)
+        print('before training', flush=True)
         trainer.fit(model, datamodule)
         model_path = checkpoint_callback.best_model_path
     else:
@@ -123,7 +128,6 @@ if __name__ == '__main__':
 
     parser.add_argument('-dataset_path', type=str, default='./data/processed')
     parser.add_argument('-dataset', dest='dataset', default='WN18RR', help='Dataset to use, default: WN18RR')
-    parser.add_argument('-small_dataset', action='store_true', default=False, help='whether to use small dataset')
     parser.add_argument('-model', default='T5Finetuner', help='Model Name')
     parser.add_argument('-gpu', type=str, default='0', help='Set GPU Ids : Eg: For CPU = -1, For Single GPU = 0')
     parser.add_argument('-seed', dest='seed', default=41504, type=int, help='Seed for randomization')
@@ -154,6 +158,15 @@ if __name__ == '__main__':
     parser.add_argument('-skip_n_val_epoch', default=0, type=int, help='')
     parser.add_argument('-seq_dropout', default=0., type=float, help='')
     parser.add_argument('-temporal', action='store_true', help='')
+
+    parser.add_argument('-small_dataset', action='store_true', default=False, help='whether to use small dataset')
+    parser.add_argument('-contextualization', type=bool, default=False, help='whether to add contextualization as an auxilary task')
+    parser.add_argument('-reconstruction', type=bool, default=False, help='whether to add reconstruction as an auxilary task')
+    parser.add_argument('-src_max_length_context', default=128, type=int, help='')
+    parser.add_argument('-tgt_max_length_context', default=256, type=int, help='')
+    parser.add_argument('-alpha', default=0.5, type=float, help='loss ratio among contextualization and prediction')
+    parser.add_argument('-suffix', default="", type=str, help='')
+
     configs = parser.parse_args()
     n_ent = get_num(configs.dataset_path, configs.dataset, 'entity')
     n_rel = get_num(configs.dataset_path, configs.dataset, 'relation')

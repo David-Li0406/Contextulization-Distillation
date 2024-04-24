@@ -54,6 +54,19 @@ def read_name(configs, dataset_path, dataset):
     rel_name_list = read_file(configs, dataset_path, dataset, rel_name_file, 'name')
     return ent_name_list, rel_name_list
 
+def read_context(configs, dataset_path, dataset, filename):
+    file_name = os.path.join(dataset_path, dataset, filename)
+    with open(file_name) as file:
+        lines = file.read().strip().split('\n')
+    n_triples = int(lines[0])
+    triples = []
+    for line in lines[1:]:
+        split = line.split(' |**| ')
+        split = [int(split[i]) if i<3 else split[i] for i in range(len(split))]
+        triples.append(split)
+    assert n_triples == len(triples), 'number of triplets is not correct.'
+    return triples
+
 
 def get_ground_truth(configs, triples):
     tail_ground_truth, head_ground_truth = ddict(list), ddict(list)
@@ -124,7 +137,7 @@ def construct_prefix_trie(ent_token_ids_in_trie):
 
 
 def batchify(output_dict, key, padding_value=None, return_list=False):
-    tensor_out = [out[key] for out in output_dict]
+    tensor_out = [out[key] for out in output_dict if key in out]
     if return_list:
         return tensor_out
     if not isinstance(tensor_out[0], torch.LongTensor) and not isinstance(tensor_out[0], torch.FloatTensor):
