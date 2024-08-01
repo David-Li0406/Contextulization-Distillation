@@ -42,6 +42,7 @@ class T5Finetuner(pl.LightningModule):
                 self.ent_embed2 = nn.Embedding(self.configs.n_ent, prompt_dim)
 
         self.history = {'perf': ..., 'loss': []}
+        self.pred = {}
 
     def training_step(self, batched_data, batch_idx):
         # src_ids, src_mask: .shape: (batch_size, padded_seq_len)
@@ -56,6 +57,22 @@ class T5Finetuner(pl.LightningModule):
         train_triples = batched_data['train_triple']
         # ent_rel .shape: (batch_size, 2)
         ent_rel = batched_data['ent_rel']
+
+        if self.configs.contextualization:
+            src_ids_context = batched_data['source_ids_context']
+            src_mask_context = batched_data['source_mask_context']
+            target_ids_context = batched_data['target_ids_context']
+            target_mask_context = batched_data['target_mask_context']
+            labels_context = target_ids_context.clone()
+            labels_context[labels_context[:, :] == self.trainer.datamodule.tokenizer.pad_token_id] = -100
+
+        if self.configs.reconstruction:
+            src_ids_rec = batched_data['source_ids_rec']
+            src_mask_rec = batched_data['source_mask_rec']
+            target_ids_rec = batched_data['target_ids_rec']
+            target_mask_rec = batched_data['target_mask_rec']
+            labels_rec = target_ids_rec.clone()
+            labels_rec[labels_rec[:, :] == self.trainer.datamodule.tokenizer.pad_token_id] = -100
 
         if self.configs.use_soft_prompt:
             # input_index .shape: (batch_size, seq_len + 4)
@@ -95,6 +112,20 @@ class T5Finetuner(pl.LightningModule):
         else:
             output = self.T5ForConditionalGeneration(input_ids=src_ids, attention_mask=src_mask, labels=labels)
         loss = torch.mean(output.loss)
+        
+        if self.configs.contextualization or self.configs.reconstruction:
+            loss_context, loss_rec = 0.0, 0.0
+
+            if self.configs.contextualization:
+                output_context = self.T5ForConditionalGeneration(input_ids=src_ids_context, attention_mask=src_mask_context, labels=labels_context)
+                loss_context = torch.mean(output_context.loss)
+
+            if self.configs.reconstruction:
+                output_rec = self.T5ForConditionalGeneration(input_ids=src_ids_rec, attention_mask=src_mask_rec, labels=labels_rec)
+                loss_rec = torch.mean(output_rec.loss)
+
+            loss = 0.5*loss + 0.5*loss_context + 0.5*loss_rec
+
 
         self.history['loss'].append(loss.detach().item())
         return {'loss': loss}
@@ -149,8 +180,36 @@ class T5Finetuner(pl.LightningModule):
                         rank += 1
             else:
                 ranks.append(random.randint(self.configs.num_beams + 1, self.configs.n_ent))
-
         out = {'ranks': ranks}
+
+        context = None
+        if self.configs.contextualization:
+
+            num_beam_groups = self.configs.num_beam_groups if self.configs.decoder == 'diverse_beam_search' else 1
+            diversity_penalty = self.configs.diversity_penalty if self.configs.decoder == 'diverse_beam_search' else 0.
+            src_ids_context, src_mask_context = batched_data['source_ids_context'], batched_data['source_mask_context']     
+            
+            outputs = self.T5ForConditionalGeneration.generate(input_ids=src_ids_context,
+                                                                attention_mask=src_mask_context,
+                                                                return_dict_in_generate=True,
+                                                                num_return_sequences=1,
+                                                                max_length=128,
+                                                                diversity_penalty=diversity_penalty,
+                                                                num_beam_groups=num_beam_groups,
+                                                                num_beams=1,
+                                                                bos_token_id=0,)
+            context = self.trainer.datamodule.tokenizer.batch_decode(outputs.sequences, skip_special_tokens=True)
+        
+        src_text = self.trainer.datamodule.tokenizer.batch_decode(src_ids, skip_special_tokens=True)
+        for i, (src, r) in enumerate(zip(src_text, ranks)):
+            self.pred[src] = {
+                'rank': r,
+                'gt': target_names[i],
+                'pred': group_text[i][0]
+            }
+            if context is not None:
+                self.pred[src]['context'] = context[i]
+
         return out
 
     def decode(self, src_ids, src_mask, batched_data):
@@ -364,6 +423,9 @@ class T5Finetuner(pl.LightningModule):
 
         perf = get_performance(self, tail_ranks, head_ranks)
         print(perf)
+        import json
+        with open('predict_result_{}'.format(self.configs.contextualization), 'w') as f:
+            f.write(json.dumps(self.pred))
 
     def test_step(self, batched_data, batch_idx, dataset_idx):
         return self.validation_step(batched_data, batch_idx, dataset_idx)

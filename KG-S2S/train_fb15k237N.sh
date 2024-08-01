@@ -1,10 +1,20 @@
-export CUDA_VISIBLE_DEVICES=6
+export CUDA_VISIBLE_DEVICES=5
+
+CONTEXTUALIZATION=true
+RECONSTRUCTION=false
+DATASET=FB15k-237N
+LR=0.001
+EPOCH=50
+BATCH_SIZE=16
+SKIP_N_VAL_EPOCH=30
 
 # FB15K-237N
-python3 main.py -dataset 'FB15k-237N' \
-                -lr 0.001 \
-                -epoch 50 \
-                -batch_size 32 \
+python3 main.py -dataset $DATASET \
+                -contextualization $CONTEXTUALIZATION \
+                -reconstruction $RECONSTRUCTION \
+                -lr $LR \
+                -epoch $EPOCH \
+                -batch_size $BATCH_SIZE \
                 -src_descrip_max_length 80 \
                 -tgt_descrip_max_length 80 \
                 -use_soft_prompt \
@@ -12,16 +22,17 @@ python3 main.py -dataset 'FB15k-237N' \
                 -seq_dropout 0.2 \
                 -num_beams 40 \
                 -eval_tgt_max_length 30 \
-                -skip_n_val_epoch 30 \
-                -contextualization 
+                -skip_n_val_epoch $SKIP_N_VAL_EPOCH \
+                -save_dir checkpoint/dataset-${DATASET}_contextualization-${CONTEXTUALIZATION}_reconstruction-${RECONSTRUCTION}_lr-${LR}_epoch-${EPOCH}_batch_size-${BATCH_SIZE}_skip_n_val_epoch-${SKIP_N_VAL_EPOCH}
 
-# evaluation commandline:
-python3 main.py -dataset 'FB15k-237N' \
+python3 main.py -dataset $DATASET \
+                -contextualization false \
+                -reconstruction $RECONSTRUCTION \
                 -src_descrip_max_length 80 \
                 -tgt_descrip_max_length 80 \
                 -use_soft_prompt \
                 -use_rel_prompt_emb \
                 -num_beams 40 \
                 -eval_tgt_max_length 30 \
-                -model_path /home/dawei/projects/dawei/KG-S2S/checkpoint/FB15k-237N-2023-05-10-12:24:40.028910/FB15k-237N-epoch=035-val_mrr=0.3480.ckpt \
+                -model_path  \
                 -use_prefix_search 
