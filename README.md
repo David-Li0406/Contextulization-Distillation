@@ -39,7 +39,7 @@ cd KGE-LLM
 python run.sh
 ```
 
-After runing the script, you should get two data files ``knowledge_context.txt`` in the corresponding dataset folder.
+After running the script, you should get two data files ``knowledge_context.txt`` in the corresponding dataset folder.
 
 We will later provide the generated corpus [here](https://drive.google.com/drive/folders/1QQAKEAIELteDhlR_ScZczf41L2iE_PLy?usp=sharing) and the post-processing script.
 
